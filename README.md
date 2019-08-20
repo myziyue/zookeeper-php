@@ -1,2 +1,3 @@
-# zookeeper-php
-Zookeeper for php language
+# yunhu-zookeeper
+
+zookeeper客户端
