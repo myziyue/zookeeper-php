@@ -15,8 +15,6 @@ return [
         'scheme' => env('ZK_SCHEME', null),
         'cert' => env('ZK_CERT', null),
         'timeout' => 1000,
-        'reserved' => null,
-        'retry_interval' => 0,
         'pool' => [
             'min_connections' => 1,
             'max_connections' => 10,

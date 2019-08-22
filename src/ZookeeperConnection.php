@@ -11,13 +11,13 @@ declare(strict_types=1);
 
 namespace Yunhu\YunhuZookeeper;
 
-use http\Exception\InvalidArgumentException;
 use Hyperf\Contract\ConnectionInterface;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Pool\Connection as BaseConnection;
 use Hyperf\Pool\Exception\ConnectionException;
 use Hyperf\Pool\Pool;
 use Hyperf\Redis\Exception\InvalidNoExistsPathException;
+use Hyperf\Redis\Exception\InvalidZookeeperArgumentException;
 use Psr\Container\ContainerInterface;
 
 class ZookeeperConnection extends BaseConnection implements ConnectionInterface
@@ -109,11 +109,11 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
      * @param $event
      * @param $string
      */
-    public function connectCallBack($type, $event, $string): void
+    public function connectCallBack(int $type, string $event, string $str): void
     {
         $this->logger->debug("Connect state: {$event} | {$this->zkHosts}");
-        $options = [$type, $event, $string];
-        if(isset($this->connectCallBackFunc)) {
+        $options = [$type, $event, $str];
+        if (isset($this->connectCallBackFunc)) {
             $this->logger->debug("Callback connect state. | {$this->zkHosts}");
             call_user_func($this->connectCallBackFunc, $options);
         }
@@ -145,32 +145,32 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
     /**
      *  Gets the data associated with a node synchronously
      *
-     * @param $path
+     * @param $node
      * @return string
      */
-    public function get($path): string
+    public function get(string $node): string
     {
-        if(!$this->connection->exists($path)) {
-            $this->logger->error("Node：{$path} does not exist. | {$this->zkHosts}");
+        if (!$this->connection->exists($node)) {
+            $this->logger->error("Node：{$node} does not exist. | {$this->zkHosts}");
             return "";
         }
-        return $this->connection->get($path);
+        return $this->connection->get($node);
     }
 
     /**
      * Sets the data associated with a node
      *
-     * @param $path
+     * @param $node
      * @param $value
      */
-    public function set($path, $value)
+    public function set(string $node, string $value)
     {
-        if(!$this->connection->exists($path)) {
-            $this->logger->debug("Node：{$path} does not exist，Start creating nodes. | {$this->zkHosts}");
-            $this->makePath($path);
-            $this->makeNode($path, $value);
+        if (!$this->connection->exists($node)) {
+            $this->logger->debug("Node：{$node} does not exist，Start creating nodes. | {$this->zkHosts}");
+            $this->makePath($node);
+            $this->makeNode($node, $value);
         } else {
-            $this->connection->set($path, $value);
+            $this->connection->set($node, $value);
         }
 
     }
@@ -178,17 +178,17 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
     /**
      * 根据路径分隔符，创建节点
      *
-     * @param $path
+     * @param $node
      * @param string $value
      */
-    protected function makePath($path, $value = '')
+    protected function makePath(string $node, string $value = '')
     {
-        $parts = explode("/", $path);
+        $parts = explode("/", $node);
         $parts = array_filter($parts);
         $subPath = "";
-        while(count($parts) > 1) {
+        while (count($parts) > 1) {
             $subPath .= '/' . array_shift($parts);
-            if(!$this->connection->exists($subPath)) {
+            if (!$this->connection->exists($subPath)) {
                 $this->makeNode($subPath, $value);
             }
         }
@@ -197,14 +197,14 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
     /**
      * Create a node synchronously
      *
-     * @param $path
+     * @param $node
      * @param $value
      * @param array $options
      * @return mixed
      */
-    protected function makeNode($path, $value, $options = [])
+    protected function makeNode(string $node, string $value, array $options = [])
     {
-        if(empty($options)) {
+        if (empty($options)) {
             $options = [
                 [
                     'perms' => \Zookeeper::PERM_ALL,
@@ -213,47 +213,47 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
                 ]
             ];
         }
-        $this->logger->debug("Create Node : {$path} , value : {$value} | {$this->zkHosts}");
-        return $this->connection->create($path, $value, $options);
+        $this->logger->debug("Create Node : {$node} , value : {$value} | {$this->zkHosts}");
+        return $this->connection->create($node, $value, $options);
     }
 
     /**
      * Lists the children of a node synchronously
      *
-     * @param $path
+     * @param $node
      * @return mixed
      */
-    public function getChildren($path)
+    public function getChildren(string $node)
     {
-        if(strlen($path) > 1 && preg_match('@/$@', $path)) {
-            $path = substr($path, 0, -1);
+        if (strlen($node) > 1 && preg_match('@/$@', $node)) {
+            $node = substr($node, 0, -1);
         }
-        return $this->connection->getChildren($path);
+        return $this->connection->getChildren($node);
     }
 
     /**
-     * @param $path
+     * @param $node
      * @param null $callback
      * @return string
      */
-    public function watch($path, $callback = null): string
+    public function watch(string $node, callable $callback): string
     {
-        if(!is_callable($callback)) {
-            throw new InvalidArgumentException("Invalid callback function.");
+        if (!is_callable($callback)) {
+            throw new InvalidZookeeperArgumentException("Invalid callback function.");
         }
 
-        if($this->connection->exists($path)) {
-            if(!isset($this->watcherCallbackFunc[$path])){
-                $this->watcherCallbackFunc[$path] = [];
+        if ($this->connection->exists($node)) {
+            if (!isset($this->watcherCallbackFunc[$node])) {
+                $this->watcherCallbackFunc[$node] = [];
             }
 
-            if(!in_array($callback, $this->watcherCallbackFunc[$path])) {
-                $this->watcherCallbackFunc[$path][] = $callback;
-                return $this->connection->get($path, [$this, 'watchCallback']);
+            if (!in_array($callback, $this->watcherCallbackFunc[$node])) {
+                $this->watcherCallbackFunc[$node][] = $callback;
+                return $this->connection->get($node, [$this, 'watchCallback']);
             }
+        } else {
+            throw new InvalidNoExistsPathException("Node {$node} does not exists.");
         }
-
-        throw new InvalidNoExistsPathException("Node {$path} does not exists.");
 
     }
 
@@ -262,39 +262,38 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
      * Watch Callback
      * @param $type
      * @param $state
-     * @param $path
+     * @param $node
      * @return mixed|null
      */
-    public function watchCallback($type, $state, $path)
+    public function watchCallback(int $type, string $state, string $node)
     {
-        if(!isset($this->watcherCallbackFunc[$path])){
-            throw new InvalidArgumentException("Invalid callback function.");
+        if (!isset($this->watcherCallbackFunc[$node])) {
+            throw new InvalidZookeeperArgumentException("Invalid callback function.");
         }
 
-        if(isset($this->watcherCallbackFunc[$path])) {
-            $this->connection->get($path, [$this, 'watchCallback']);
-            return call_user_func($this->watcherCallbackFunc[$path], [$this->connection, $path]);
+        foreach ($this->watcherCallbackFunc[$node] as $watcherCallback) {
+            $this->connection->get($node, [$this, 'watchCallback']);
+            return call_user_func($watcherCallback, [$this->connection, $node]);
         }
-        return null;
     }
 
     /**
      * Cacel Watch Callback
-     * @param $path
-     * @param null $callback
+     * @param $node
      * @return bool
      */
-    public function cacelWatch($path, $callback = null)
+    public function cacelWatch(string $node, callable $callback = null)
     {
-        if(isset($this->watcherCallbackFunc[$path])) {
-            if(empty($callback)) {
-                unset($this->watcherCallbackFunc[$path]);
-                $this->connection->get($path);
+        if (isset($this->watcherCallbackFunc[$node])) {
+            if (empty($callback)) {
+                $this->watcherCallbackFunc[$node] =[];
+                $this->connection->get($node, [$this, 'watchCallback']);
                 return true;
             } else {
-                $key = array_search($callback, $this->watcherCallbackFunc[$path]);
-                if($key !== false) {
-                    unset($this->watcherCallbackFunc[$path][$key]);
+                $key = array_search($callback, $this->watcherCallbackFunc[$node]);
+                if ($key !== false) {
+                    unset($this->watcherCallbackFunc[$node][$key]);
+                    $this->connection->get($node, [$this, 'watchCallback']);
                     return true;
                 } else {
                     return false;
