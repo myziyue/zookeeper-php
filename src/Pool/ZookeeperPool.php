@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Yunhu.
+ * This file is part of Myziyue.
  *
- * @link     https://www.yunhuyj.com/
- * @contact  zhiming.bi@yunhuyj.com
+ * @link     https://www.myziyue.com/
+ * @contact  zhiming.bi@myziyue.com
  * @license  http://license.coscl.org.cn/MulanPSL/
  */
 
-namespace Yunhu\YunhuZookeeper\Pool;
+namespace Myziyue\Zookeeper\Pool;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Contract\ConnectionInterface;
 use Hyperf\Pool\Pool;
 use Hyperf\Utils\Arr;
 use Psr\Container\ContainerInterface;
-use Yunhu\YunhuZookeeper\ZookeeperConnection;
+use Myziyue\Zookeeper\ZookeeperConnection;
 
 class ZookeeperPool extends Pool
 {

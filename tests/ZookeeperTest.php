@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Hyperf.
+ * This file is part of Myziyue.
  *
- * @link     https://www.hyperf.io
- * @document https://doc.hyperf.io
- * @contact  group@hyperf.io
- * @license  https://github.com/hyperf-cloud/hyperf/blob/master/LICENSE
+ * @link     https://www.myziyue.com/
+ * @contact  zhiming.bi@myziyue.com
+ * @license  http://license.coscl.org.cn/MulanPSL/
  */
 
-namespace YunhuTest\YunhuZookeeper;
+namespace MyziyueTest\Zookeeper;
 
 use Hyperf\Config\Config;
 use Hyperf\Contract\ConfigInterface;
@@ -18,10 +17,10 @@ use Hyperf\Di\Container;
 use Hyperf\Utils\ApplicationContext;
 use Mockery;
 use PHPUnit\Framework\TestCase;
-use Yunhu\YunhuZookeeper\Pool\PoolFactory;
-use Yunhu\YunhuZookeeper\Pool\ZookeeperPool;
-use Yunhu\YunhuZookeeper\Zookeeper;
-use YunhuTest\YunhuZookeeper\Stub\ZookeeperPoolStub;
+use Myziyue\Zookeeper\Pool\PoolFactory;
+use Myziyue\Zookeeper\Pool\ZookeeperPool;
+use Myziyue\Zookeeper\Zookeeper;
+use MyziyueTest\Zookeeper\Stub\ZookeeperPoolStub;
 
 /**
  * @internal

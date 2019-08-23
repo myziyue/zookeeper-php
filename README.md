@@ -1,3 +1,3 @@
-# yunhu-zookeeper
+# zookeeper PHP客户端 -- Hyperf框架组件
 
-zookeeper客户端
+zookeeper PHP客户端 -- Hyperf框架组件

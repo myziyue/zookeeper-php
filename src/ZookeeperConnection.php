@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 /**
- * This file is part of Yunhu.
+ * This file is part of Myziyue.
  *
- * @link     https://www.yunhuyj.com/
- * @contact  zhiming.bi@yunhuyj.com
+ * @link     https://www.myziyue.com/
+ * @contact  zhiming.bi@myziyue.com
  * @license  http://license.coscl.org.cn/MulanPSL/
  */
 
-namespace Yunhu\YunhuZookeeper;
+namespace Myziyue\Zookeeper;
 
 use Hyperf\Contract\ConnectionInterface;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Pool\Connection as BaseConnection;
 use Hyperf\Pool\Exception\ConnectionException;
 use Hyperf\Pool\Pool;
-use Yunhu\YunhuZookeeper\Exception\InvalidNoExistsPathException;
-use Yunhu\YunhuZookeeper\Exception\InvalidZookeeperArgumentException;
+use Myziyue\Zookeeper\Exception\InvalidNoExistsPathException;
+use Myziyue\Zookeeper\Exception\InvalidZookeeperArgumentException;
 use Psr\Container\ContainerInterface;
 
 class ZookeeperConnection extends BaseConnection implements ConnectionInterface

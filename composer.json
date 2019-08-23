@@ -1,17 +1,17 @@
 {
-    "name": "yunhu/yunhu-zookeeper",
+    "name": "Myziyue/Myziyue-zookeeper",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "php",
         "hyperf",
-        "yunhu",
+        "Myziyue",
         "zookeeper"
     ],
-    "description": "Yunhu Zookeeper",
+    "description": "Myziyue Zookeeper",
     "autoload": {
         "psr-4": {
-            "Yunhu\\YunhuZookeeper\\": "src/"
+            "Myziyue\\MyziyueZookeeper\\": "src/"
         }
     },
     "autoload-dev": {
@@ -42,7 +42,7 @@
     },
     "extra": {
         "hyperf": {
-            "config": "Yunhu\\YunhuZookeeper\\ConfigProvider"
+            "config": "Myziyue\\MyziyueZookeeper\\ConfigProvider"
         }
     }
 }
