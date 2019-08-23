@@ -233,10 +233,10 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
 
     /**
      * @param $node
-     * @param null $callback
-     * @return string
+     * @param callable $callback
+     * @return bool
      */
-    public function watch(string $node, callable $callback): string
+    public function watch(string $node, callable $callback): bool
     {
         if (!is_callable($callback)) {
             throw new InvalidZookeeperArgumentException("Invalid callback function.");
@@ -249,12 +249,13 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
 
             if (!in_array($callback, $this->watcherCallbackFunc[$node])) {
                 $this->watcherCallbackFunc[$node][] = $callback;
-                return $this->connection->get($node, [$this, 'watchCallback']);
+                $this->connection->get($node, [$this, 'watchCallback']);
+                return true;
             }
+            return false;
         } else {
             throw new InvalidNoExistsPathException("Node {$node} does not exists.");
         }
-
     }
 
 
@@ -279,7 +280,8 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
 
     /**
      * Cacel Watch Callback
-     * @param $node
+     * @param string $node
+     * @param callable $callback
      * @return bool
      */
     public function cacelWatch(string $node, callable $callback = null)
