@@ -16,8 +16,8 @@ use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\Pool\Connection as BaseConnection;
 use Hyperf\Pool\Exception\ConnectionException;
 use Hyperf\Pool\Pool;
-use Hyperf\Redis\Exception\InvalidNoExistsPathException;
-use Hyperf\Redis\Exception\InvalidZookeeperArgumentException;
+use Yunhu\YunhuZookeeper\Exception\InvalidNoExistsPathException;
+use Yunhu\YunhuZookeeper\Exception\InvalidZookeeperArgumentException;
 use Psr\Container\ContainerInterface;
 
 class ZookeeperConnection extends BaseConnection implements ConnectionInterface
@@ -288,7 +288,7 @@ class ZookeeperConnection extends BaseConnection implements ConnectionInterface
     {
         if (isset($this->watcherCallbackFunc[$node])) {
             if (empty($callback)) {
-                $this->watcherCallbackFunc[$node] =[];
+                $this->watcherCallbackFunc[$node] = [];
                 $this->connection->get($node, [$this, 'watchCallback']);
                 return true;
             } else {

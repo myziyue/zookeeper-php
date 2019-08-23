@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @license  http://license.coscl.org.cn/MulanPSL/
  */
 
-namespace Hyperf\Redis\Exception;
+namespace Yunhu\YunhuZookeeper\Exception;
 
 class InvalidNoExistsPathException extends \RuntimeException
 {
