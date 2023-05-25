@@ -1,5 +1,5 @@
 {
-    "name": "Myziyue/Myziyue-zookeeper",
+    "name": "Myziyue/zookeeper-php",
     "type": "library",
     "license": "MIT",
     "keywords": [
@@ -11,7 +11,7 @@
     "description": "Myziyue Zookeeper",
     "autoload": {
         "psr-4": {
-            "Myziyue\\MyziyueZookeeper\\": "src/"
+            "Myziyue\\Zookeeper\\": "src/"
         }
     },
     "autoload-dev": {
@@ -23,12 +23,12 @@
         "php": ">=7.2",
         "ext-swoole": ">=4.3",
         "ext-zookeeper": ">=0.7",
-        "hyperf/utils": "1.0.*",
-        "hyperf/pool": "~1.0.0"
+        "hyperf/utils": ">=1.0",
+        "hyperf/pool": ">=1.0"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^2.14",
-        "hyperf/testing": "1.0.*",
+        "hyperf/testing": ">=1.0",
         "phpstan/phpstan": "^0.10.5",
         "swoft/swoole-ide-helper": "dev-master"
     },
@@ -42,7 +42,7 @@
     },
     "extra": {
         "hyperf": {
-            "config": "Myziyue\\MyziyueZookeeper\\ConfigProvider"
+            "config": "Myziyue\\Zookeeper\\ConfigProvider"
         }
     }
 }
