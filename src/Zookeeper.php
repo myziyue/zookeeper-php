@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace Myziyue\Zookeeper;
 
 use Myziyue\Zookeeper\Pool\PoolFactory;
-use Hyperf\Utils\Context;
+use Hyperf\Context\Context;
 
 class Zookeeper
 {
