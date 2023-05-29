@@ -8,7 +8,7 @@
         "Myziyue",
         "zookeeper"
     ],
-    "description": "Myziyue Zookeeper",
+    "description": "Zookeeper Client for the PHP framework based on Hyperf",
     "autoload": {
         "psr-4": {
             "Myziyue\\Zookeeper\\": "src/"
